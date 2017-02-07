@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+# -------------------------------------------
+# ------------------ Sails ------------------
+# -------------------------------------------
+    # sails container
+    sails:
+        build: ./builds/sails
+        restart: always
+        volumes:
+            - "./data/sails:/srv/sails"
+        ports:
+            - "1337:1337"
+        links:
+            - "mysqldb:mysqldb"
+
+# ----------------------------------------------
+# ------------------ Database ------------------
+# ----------------------------------------------
+    # Mysql
+    mysqldb:
+        image: 'mysql:latest'
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_DATABASE: 'packebian'
+            MYSQL_USER: 'packebian'
+            MYSQL_PASSWORD: 'packebian123'
+            MYSQL_ROOT_PASSWORD: 'mysqldb123'
+        volumes:
+            - mysqlVolume:/var/lib/mysql
+volumes:
+  mysqlVolume:
+      driver: local
