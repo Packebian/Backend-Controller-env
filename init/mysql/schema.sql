@@ -2,64 +2,62 @@ create database if not exists Packebian;
 
 use Packebian;
 
-alter table LOG drop foreign key fk_LOG_ID_PACKET;
-alter table PACKET drop foreign key fk_PACKET_ID_TICKET;
-alter table PACKET drop foreign key fk_PACKET_ID_UTILISATEUR;
-alter table TICKET drop foreign key fk_TICKET_ID_UTILISATEUR;
+alter table LOGS drop foreign key fk_LOG_ID_PACKETS;
+alter table PACKETS drop foreign key fk_PACKET_ID_TICKETS;
+alter table PACKETS drop foreign key fk_PACKET_ID_USERS;
+alter table TICKETS drop foreign key fk_TICKET_ID_USERS;
 
-drop table if exists LOG, PACKET, TICKET, UTILISATEUR;
- 
-create table UTILISATEUR (
+drop table if exists LOGS, PACKETS, TICKETS, USERS;
+
+create table USERS (
 	ID int not null auto_increment,
-	NOM varchar(255),
-	PRENOM varchar(255),
-	MAIL varchar(255),
-	-- STATUT :
-	-- 0 : utilisateur simple par défaut
-	-- 1 : administrateur
-	-- 2 : super-administrateur
-	STATUT int default 0,
+	LASTNAME varchar(255),
+	FIRSTNAME varchar(255),
+	EMAIL varchar(255),
+	-- STATUS :
+	-- 0 : simple user by default
+	-- 1 : administrator
+	-- 2 : super-administrator
+	STATUS int default 0,
 	primary key (ID)
 );
 
-create table TICKET (
+create table TICKETS (
 	ID int not null auto_increment,
-	ID_UTILISATEUR int not null,
-	NOM varchar(255),
+	ID_USER int not null,
+	NAME varchar(255),
 	VERSION varchar(255),
-	-- ARCHITECTURE : changer en int si les choix sont récurents
 	ARCHITECTURE varchar(255),
 	MAINTAINER varchar(255),
 	FILIERE varchar(255),
-	MATIERE varchar(255),
+	CLASS varchar(255),
 	DESCRIPTION text,
-	DEPENDANCES text,
-	-- ETAT :
-	-- -1 : refusé
-	--  0 : en attente par défaut
-	--  1 : validé
-	ETAT int default 0,
+	DEPENDENCIES text,
+	-- STATUS :
+	-- -1 : refused
+	--  0 : waiting (default)
+	--  1 : validated
+	STATUS int default 0,
 	primary key (ID),
-	constraint fk_TICKET_ID_UTILISATEUR foreign key (ID_UTILISATEUR) references UTILISATEUR(ID) on delete cascade
+	constraint fk_TICKETS_ID_USER foreign key (ID_USER) references USERS(ID) on delete cascade
 );
 
-create table PACKET (
+create table PACKETS (
 	ID int not null auto_increment,
-	ID_UTILISATEUR int not null,
+	ID_USER int not null,
 	-- ID_TICKET :
-	-- les administrateurs doivent passer par un ticket qui sera automatiquement validé
-	-- dans le but de créer un package
+	-- even administrator must create a ticket to create a package. These tickets will be automatically be validated though.
 	ID_TICKET int not null,
 	primary key (ID),
-	constraint fk_PACKET_ID_UTILISATEUR foreign key (ID_UTILISATEUR) references UTILISATEUR(ID) on delete cascade,
-	constraint fk_PACKET_ID_TICKET foreign key (ID_TICKET) references TICKET(ID) on delete cascade
+	constraint fk_PACKETS_ID_USER foreign key (ID_USER) references USERS(ID) on delete cascade,
+	constraint fk_PACKETS_ID_TICKET foreign key (ID_TICKET) references TICKETS(ID) on delete cascade
 );
 
-create table LOG (
+create table LOGS (
 	ID int not null auto_increment,
 	ID_PACKET int not null,
 	DATE_BUILD date,
 	DETAILS text,
 	primary key (ID),
-	constraint fk_LOG_ID_PACKET foreign key (ID_PACKET) references PACKET(ID) on delete cascade
+	constraint fk_LOGS_ID_PACKET foreign key (ID_PACKET) references PACKETS(ID) on delete cascade
 );
