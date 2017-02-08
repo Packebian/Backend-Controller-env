@@ -20,7 +20,7 @@ services:
 # ----------------------------------------------
     # Mysql
     mysqldb:
-        image: 'mysql:latest'
+        image: 'mysql/mysql-server:latest'
         ports:
             - '3306:3306'
         environment:
@@ -30,6 +30,7 @@ services:
             MYSQL_ROOT_PASSWORD: 'mysqldb123'
         volumes:
             - mysqlVolume:/var/lib/mysql
+            - ./init/mysql/:/docker-entrypoint-initdb.d/
 volumes:
   mysqlVolume:
       driver: local
