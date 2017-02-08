@@ -19,4 +19,4 @@ RUN npm install -g sails forever
 RUN if [ ! -f package.json ]; then sails new .; fi
 
 # Start application
-CMD /bin/bash -c 'forever app.js'
+CMD /bin/bash -c 'forever -c "npm start" ./'
