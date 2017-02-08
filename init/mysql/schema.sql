@@ -1,63 +1,63 @@
-create database if not exists Packebian;
+-- -----------------------------------------------------
+-- Begin of sql script
+-- -----------------------------------------------------
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-use Packebian;
+-- -----------------------------------------------------
+-- Schema `Packebian`
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `Packebian` ;
 
-alter table LOGS drop foreign key fk_LOG_ID_PACKETS;
-alter table PACKETS drop foreign key fk_PACKET_ID_TICKETS;
-alter table PACKETS drop foreign key fk_PACKET_ID_USERS;
-alter table TICKETS drop foreign key fk_TICKET_ID_USERS;
+CREATE SCHEMA IF NOT EXISTS `Packebian` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `Packebian`;
 
-drop table if exists LOGS, PACKETS, TICKETS, USERS;
+-- -----------------------------------------------------
+-- Table `Users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Users`;
 
-create table USERS (
-	ID int not null auto_increment,
-	LASTNAME varchar(255),
-	FIRSTNAME varchar(255),
-	EMAIL varchar(255),
-	-- STATUS :
+CREATE TABLE IF NOT EXISTS `Users` (
+	id INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(255),
+	lastname VARCHAR(255),
+	firstname VARCHAR(255),
+	email VARCHAR(255),
+	-- userlevel :
 	-- 0 : simple user by default
 	-- 1 : administrator
 	-- 2 : super-administrator
-	STATUS int default 0,
-	primary key (ID)
-);
+	userlevel INT DEFAULT 0,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_users_username` (`username` ASC),
+	UNIQUE INDEX `uq_users_email` (`email` ASC)
+)ENGINE = InnoDB;
 
-create table TICKETS (
-	ID int not null auto_increment,
-	ID_USER int not null,
-	NAME varchar(255),
-	VERSION varchar(255),
-	ARCHITECTURE varchar(255),
-	MAINTAINER varchar(255),
-	FILIERE varchar(255),
-	CLASS varchar(255),
-	DESCRIPTION text,
-	DEPENDENCIES text,
-	-- STATUS :
-	-- -1 : refused
-	--  0 : waiting (default)
-	--  1 : validated
-	STATUS int default 0,
-	primary key (ID),
-	constraint fk_TICKETS_ID_USER foreign key (ID_USER) references USERS(ID) on delete cascade
-);
 
-create table PACKETS (
-	ID int not null auto_increment,
-	ID_USER int not null,
-	-- ID_TICKET :
-	-- even administrator must create a ticket to create a package. These tickets will be automatically be validated though.
-	ID_TICKET int not null,
-	primary key (ID),
-	constraint fk_PACKETS_ID_USER foreign key (ID_USER) references USERS(ID) on delete cascade,
-	constraint fk_PACKETS_ID_TICKET foreign key (ID_TICKET) references TICKETS(ID) on delete cascade
-);
+-- -----------------------------------------------------
+-- Begin of transaction (data insertion)
+-- -----------------------------------------------------
+START TRANSACTION;
 
-create table LOGS (
-	ID int not null auto_increment,
-	ID_PACKET int not null,
-	DATE_BUILD date,
-	DETAILS text,
-	primary key (ID),
-	constraint fk_LOGS_ID_PACKET foreign key (ID_PACKET) references PACKETS(ID) on delete cascade
-);
+-- -----------------------------------------------------
+-- Data for table `Users`
+-- -----------------------------------------------------
+INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userlevel`) VALUES (1, 'vdanjean', 'DANJEAN', 'Vincent', 'vincent.danjean@imag.fr', 2);
+INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userlevel`) VALUES (2, 'npalix', 'PALIX', 'Nicolas', 'nicolas.palix@imag.fr', 1);
+INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userlevel`) VALUES (3, 'pmorat', 'MORAT', 'Philippe', 'phillipe.morat@imag.fr', 0);
+
+-- -----------------------------------------------------
+-- End of transaction (data insertion)
+-- -----------------------------------------------------
+COMMIT;
+
+-- -----------------------------------------------------
+-- End of script
+-- -----------------------------------------------------
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
