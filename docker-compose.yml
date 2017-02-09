@@ -7,7 +7,6 @@ services:
     # sails container
     sails:
         build: ./builds/sails
-        restart: always
         volumes:
             - "./data/sails:/srv/sails"
         ports:
