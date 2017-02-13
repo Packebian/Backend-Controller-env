@@ -38,6 +38,150 @@ CREATE TABLE IF NOT EXISTS `Users` (
 
 
 -- -----------------------------------------------------
+-- Table `Infos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Infos`;
+
+CREATE TABLE IF NOT EXISTS `Infos` (
+	id INT NOT NULL AUTO_INCREMENT,
+	name INT NOT NULL,
+	maintainer VARCHAR(255) NOT NULL,
+	architecture VARCHAR(255) NOT NULL,
+	major VARCHAR(255),
+	class VARCHAR(255),
+	description TEXT,
+	dependencies TEXT,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_infos_name` (`name` ASC)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Tickets`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Tickets`;
+
+CREATE TABLE IF NOT EXISTS `Tickets` (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	info_id INT NOT NULL,
+	status INT DEFAULT 0,
+	version VARCHAR(255),
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_tickets_user_id`
+		FOREIGN KEY (`user_id`)
+		REFERENCES `Users` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT `fk_tickets_info_id`
+		FOREIGN KEY (`info_id`)
+		REFERENCES `Infos` (`id`)
+		ON DELETE CASCADE
+		ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Packages`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Packages`;
+
+CREATE TABLE IF NOT EXISTS `Packages` (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	info_id INT NOT NULL,
+	ticket_id INT,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_packages_user_id`
+		FOREIGN KEY (`user_id`)
+		REFERENCES `Users` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT `fk_packages_info_id`
+		FOREIGN KEY (`info_id`)
+		REFERENCES `Infos` (`id`)
+		ON DELETE CASCADE
+		ON UPDATE NO ACTION,
+	CONSTRAINT `fk_packages_ticket_id`
+		FOREIGN KEY (`ticket_id`)
+		REFERENCES `Tickets` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Versions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Versions`;
+
+CREATE TABLE IF NOT EXISTS `Versions` (
+	id INT NOT NULL AUTO_INCREMENT,
+	version INT(255) NOT NULL,
+	package_id INT NOT NULL,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_versions_packageVersion` (`version` ASC, `package_id` ASC),
+	CONSTRAINT `fk_versions_package_id`
+		FOREIGN KEY (`package_id`)
+		REFERENCES `Packages` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Builds`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Builds`;
+
+CREATE TABLE IF NOT EXISTS `Builds` (
+	id INT NOT NULL AUTO_INCREMENT,
+	start DATETIME NOT NULL,
+	version INT NOT NULL,
+	package_id INT NOT NULL,
+	result INT,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_builds_package_id`
+		FOREIGN KEY (`package_id`)
+		REFERENCES `Packages` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Votes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Votes`;
+
+CREATE TABLE IF NOT EXISTS `Votes` (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	ticket_id INT NOT NULL,
+	vote INT,
+	createdAt DATETIME DEFAULT NOW(),
+	updatedAt DATETIME DEFAULT NOW(),
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_votes_userTicket` (`user_id` ASC, `ticket_id` ASC),
+	CONSTRAINT `fk_votes_ticket_id`
+		FOREIGN KEY (`ticket_id`)
+		REFERENCES `Tickets` (`id`)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Begin of transaction (data insertion)
 -- -----------------------------------------------------
 START TRANSACTION;
