@@ -68,7 +68,6 @@ CREATE TABLE IF NOT EXISTS `Tickets` (
 	user_id INT NOT NULL,
 	info_id INT NOT NULL,
 	status INT DEFAULT 0,
-	version VARCHAR(255),
 	createdAt DATETIME DEFAULT NOW(),
 	updatedAt DATETIME DEFAULT NOW(),
 	PRIMARY KEY (`id`),
@@ -200,15 +199,24 @@ INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userle
 -- Data for table `Infos`
 -- -----------------------------------------------------
 INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (1, 'paraview', 'vincent.danjean@imag.fr', 'all', 'RICM5', 'VISU', 'open-source photoshop', 'python');
-INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (2, 'lustre', 'nicolas.palix@imag.fr', 'all', 'RICM5', 'ALM1', 'boole algebra', '');
-INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (3, 'r-studio', 'phillipe.morat@imag.fr', 'all', 'RICM5', 'PS', 'IDE for R', 'r');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (2, 'lustre', 'nicolas.palix@imag.fr', 'all', 'RICM3', 'ALM1', 'boole algebra', '');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (3, 'r-studio', 'vincent.danjean@imag.fr', 'all', 'RICM3', 'PS', 'IDE for R', 'r');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (4, 'python', 'vincent.danjean@imag.fr', 'all', 'RICM4', 'CSE', 'python language', '');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (5, 'eclipse', 'vincent.danjean@imag.fr', 'all', 'RICM', 'AOO', 'IDE for java', 'java javac');
+
+-- -----------------------------------------------------
+-- Data for table `Tickets`
+-- -----------------------------------------------------
+INSERT INTO `Tickets` (`id`, `user_id`, `info_id`, `status`) VALUES (1, 3, 1, 1);
+INSERT INTO `Tickets` (`id`, `user_id`, `info_id`, `status`) VALUES (2, 3, 4, 0);
+INSERT INTO `Tickets` (`id`, `user_id`, `info_id`, `status`) VALUES (3, 3, 5, -1);
 
 -- -----------------------------------------------------
 -- Data for table `Packages`
 -- -----------------------------------------------------
-INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (1, 1, 1);
-INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (2, 2, 2);
-INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (3, 3, 3);
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`, `ticket_id`) VALUES (1, 1, 1, 1);
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`, `ticket_id`) VALUES (2, 2, 2, NULL);
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`, `ticket_id`) VALUES (3, 3, 3, NULL);
 
 -- -----------------------------------------------------
 -- End of transaction (data insertion)
