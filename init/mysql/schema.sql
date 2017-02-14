@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS `Infos`;
 
 CREATE TABLE IF NOT EXISTS `Infos` (
 	id INT NOT NULL AUTO_INCREMENT,
-	name INT NOT NULL,
+	name VARCHAR(255) NOT NULL,
 	maintainer VARCHAR(255) NOT NULL,
 	architecture VARCHAR(255) NOT NULL,
 	major VARCHAR(255),
@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `Tickets` (
 	createdAt DATETIME DEFAULT NOW(),
 	updatedAt DATETIME DEFAULT NOW(),
 	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_tickets_info` (`info_id` ASC),
 	CONSTRAINT `fk_tickets_user_id`
 		FOREIGN KEY (`user_id`)
 		REFERENCES `Users` (`id`)
@@ -98,6 +99,8 @@ CREATE TABLE IF NOT EXISTS `Packages` (
 	createdAt DATETIME DEFAULT NOW(),
 	updatedAt DATETIME DEFAULT NOW(),
 	PRIMARY KEY (`id`),
+	UNIQUE INDEX `uq_packages_info` (`info_id` ASC),
+	UNIQUE INDEX `uq_packages_ticket` (`ticket_id` ASC),
 	CONSTRAINT `fk_packages_user_id`
 		FOREIGN KEY (`user_id`)
 		REFERENCES `Users` (`id`)
@@ -124,14 +127,14 @@ DROP TABLE IF EXISTS `Versions`;
 CREATE TABLE IF NOT EXISTS `Versions` (
 	id INT NOT NULL AUTO_INCREMENT,
 	version INT(255) NOT NULL,
-	package_id INT NOT NULL,
+	info_id INT NOT NULL,
 	createdAt DATETIME DEFAULT NOW(),
 	updatedAt DATETIME DEFAULT NOW(),
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `uq_versions_packageVersion` (`version` ASC, `package_id` ASC),
-	CONSTRAINT `fk_versions_package_id`
-		FOREIGN KEY (`package_id`)
-		REFERENCES `Packages` (`id`)
+	UNIQUE INDEX `uq_versions_info` (`version` ASC, `info_id` ASC),
+	CONSTRAINT `fk_versions_info_id`
+		FOREIGN KEY (`info_id`)
+		REFERENCES `Infos` (`id`)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 )ENGINE = InnoDB;
