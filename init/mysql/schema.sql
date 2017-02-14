@@ -197,6 +197,20 @@ INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userle
 INSERT INTO `Users` (`id`, `username`, `lastname`, `firstname`, `email`, `userlevel`) VALUES (3, 'pmorat', 'MORAT', 'Philippe', 'phillipe.morat@imag.fr', 0);
 
 -- -----------------------------------------------------
+-- Data for table `Infos`
+-- -----------------------------------------------------
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (1, 'paraview', 'vincent.danjean@imag.fr', 'all', 'RICM5', 'VISU', 'open-source photoshop', 'python');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (2, 'lustre', 'nicolas.palix@imag.fr', 'all', 'RICM5', 'ALM1', 'boole algebra', '');
+INSERT INTO `Infos` (`id`, `name`, `maintainer`, `architecture`, `major`, `class`, `description`, `dependencies`) VALUES (3, 'r-studio', 'phillipe.morat@imag.fr', 'all', 'RICM5', 'PS', 'IDE for R', 'r');
+
+-- -----------------------------------------------------
+-- Data for table `Packages`
+-- -----------------------------------------------------
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (1, 1, 1);
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (2, 2, 2);
+INSERT INTO `Packages` (`id`, `user_id`, `info_id`) VALUES (3, 3, 3);
+
+-- -----------------------------------------------------
 -- End of transaction (data insertion)
 -- -----------------------------------------------------
 COMMIT;
