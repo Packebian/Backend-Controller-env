@@ -12,24 +12,21 @@ services:
         ports:
             - "1337:1337"
         links:
-            - "mysqldb:mysqldb"
+            - "mongodb:mongodb"
 
 # ----------------------------------------------
 # ------------------ Database ------------------
 # ----------------------------------------------
-    # Mysql
-    mysqldb:
-        image: 'mysql/mysql-server:latest'
-        ports:
-            - '3306:3306'
-        environment:
-            MYSQL_DATABASE: 'Packebian'
-            MYSQL_USER: 'packebian'
-            MYSQL_PASSWORD: 'packebian123'
-            MYSQL_ROOT_PASSWORD: 'mysqldb123'
+    # Mongodb
+    mongodb:
+        image: mongo:latest
+        restart: always
         volumes:
-            - mysqlVolume:/var/lib/mysql
-            - ./init/mysql/:/docker-entrypoint-initdb.d/
+            - "mongoVolume:/data/db"
+        ports:
+            - "27017:27017"
+        command: --smallfiles --auth
+
 volumes:
-  mysqlVolume:
+  mongoVolume:
       driver: local
