@@ -6,26 +6,39 @@ services:
 # -------------------------------------------
     # sails container
     sails:
-        build: ./builds/sails
+        image: packebian/backend-controller
         volumes:
             - "./data/sails:/srv/sails"
         ports:
             - "1337:1337"
         links:
             - "mongodb:mongodb"
+        environment:
+            SAILS_SECRET: "c9693b2d5572ffd96a79cae6a8453d57"
+            MONGO_HOST: "mongodb"
+            MONGO_PORT: "27017"
+            MONGO_DB: "packebian"
+            MONGO_USER: "packebian"
+            MONGO_PASS: "packebian123"
+        command: npm start
 
 # ----------------------------------------------
 # ------------------ Database ------------------
 # ----------------------------------------------
     # Mongodb
     mongodb:
-        image: mongo:latest
+        build: ./builds/mongo
         restart: always
         volumes:
             - "mongoVolume:/data/db"
         ports:
             - "27017:27017"
-        command: --smallfiles --auth
+        environment:
+            ADMIN_USER: "root"
+            ADMIN_PASS: "mongdb123"
+            MONGO_DB: "packebian"
+            MONGO_USER: "packebian"
+            MONGO_PASS: "packebian123"
 
 volumes:
   mongoVolume:
