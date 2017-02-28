@@ -6,9 +6,11 @@ services:
 # -------------------------------------------
     # sails container
     sails:
-        image: packebian/backend-controller:0.1
+        image: packebian/backend-controller:latest
         ports:
             - "1337:1337"
+        volumes:
+            - "./data/sails:/srv/sails"
         links:
             - "mongodb:mongodb"
         environment:
@@ -18,6 +20,7 @@ services:
             MONGO_DB: "packebian"
             MONGO_USER: "packebian"
             MONGO_PASS: "packebian123"
+        command: npm start
 
 # ----------------------------------------------
 # ------------------ Database ------------------
