@@ -6,30 +6,37 @@ services:
 # -------------------------------------------
     # sails container
     sails:
-        build: ./builds/sails
-        volumes:
-            - "./data/sails:/srv/sails"
+        image: packebian/backend-controller:0.1
         ports:
             - "1337:1337"
         links:
-            - "mysqldb:mysqldb"
+            - "mongodb:mongodb"
+        environment:
+            SAILS_SECRET: "c9693b2d5572ffd96a79cae6a8453d57"
+            MONGO_HOST: "mongodb"
+            MONGO_PORT: "27017"
+            MONGO_DB: "packebian"
+            MONGO_USER: "packebian"
+            MONGO_PASS: "packebian123"
 
 # ----------------------------------------------
 # ------------------ Database ------------------
 # ----------------------------------------------
-    # Mysql
-    mysqldb:
-        image: 'mysql/mysql-server:latest'
-        ports:
-            - '3306:3306'
-        environment:
-            MYSQL_DATABASE: 'Packebian'
-            MYSQL_USER: 'packebian'
-            MYSQL_PASSWORD: 'packebian123'
-            MYSQL_ROOT_PASSWORD: 'mysqldb123'
+    # Mongodb
+    mongodb:
+        build: ./builds/mongo
+        restart: always
         volumes:
-            - mysqlVolume:/var/lib/mysql
-            - ./init/mysql/:/docker-entrypoint-initdb.d/
+            - "mongoVolume:/data/db"
+        ports:
+            - "27017:27017"
+        environment:
+            ADMIN_USER: "root"
+            ADMIN_PASS: "mongdb123"
+            MONGO_DB: "packebian"
+            MONGO_USER: "packebian"
+            MONGO_PASS: "packebian123"
+
 volumes:
-  mysqlVolume:
+  mongoVolume:
       driver: local
