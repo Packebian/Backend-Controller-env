@@ -6,7 +6,7 @@ services:
 # -------------------------------------------
     # sails container
     sails:
-        image: packebian/backend-controller:0.1
+        image: packebian/backend-controller:stable
         ports:
             - "1337:1337"
         links:
