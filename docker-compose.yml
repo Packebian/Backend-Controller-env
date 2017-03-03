@@ -7,10 +7,9 @@ services:
     # sails container
     sails:
         image: packebian/backend-controller:latest
+        tty: true
         ports:
             - "1337:1337"
-        volumes:
-            - "./data/sails:/srv/sails"
         links:
             - "mongodb:mongodb"
         environment:
@@ -28,6 +27,7 @@ services:
     # Mongodb
     mongodb:
         build: ./builds/mongo
+        tty: true
         restart: always
         volumes:
             - "mongoVolume:/data/db"
