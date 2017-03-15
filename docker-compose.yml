@@ -12,27 +12,25 @@ services:
             - "1337:1337"
         links:
             - "mongodb:mongodb"
-        volumes:
-            - "./data/sails:/srv/sails"
-        environment:
-            # Sails
-            SAILS_SECRET: "c9693b2d5572ffd96a79cae6a8453d57"
-            # Mongo
-            MONGO_HOST: "mongodb"
-            MONGO_PORT: "27017"
-            MONGO_DB: "packebian"
-            MONGO_USER: "packebian"
-            MONGO_PASS: "packebian123"
-            # Auth0
-            AUTH0_SECRET: "secret"
-            AUTH0_ALGO: "HS256"
-            AUTH0_ENDPOINT: "https://packebian.eu.auth0.com"
-            # JWT
-            JWT_SECRET: "secret"
-            JWT_LIFE: 3600
-            JWT_ALGO: "HS256"
-            JWT_ISSUER: "packebian.com"
-            JWT_AUDIENCE: "packebian.com"
+       environment:
+           # Sails
+           SAILS_SECRET: "c9693b2d5572ffd96a79cae6a8453d57"
+           # Mongo
+           MONGO_HOST: "mongodb"
+           MONGO_PORT: "27017"
+           MONGO_DB: "packebian"
+           MONGO_USER: "packebian"
+           MONGO_PASS: "packebian123"
+           # Auth0
+           AUTH0_SECRET: "secret"
+           AUTH0_ALGO: "HS256"
+           AUTH0_ENDPOINT: "https://packebian.eu.auth0.com"
+           # JWT
+           JWT_SECRET: "secret"
+           JWT_LIFE: 3600
+           JWT_ALGO: "HS256"
+           JWT_ISSUER: "packebian.com"
+           JWT_AUDIENCE: "packebian.com"
 
         command: npm start
 
