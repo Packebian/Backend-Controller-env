@@ -1,5 +1,5 @@
 # Build a docker container containing a mongodb
-FROM mongo:latest
+FROM mongo:3.6.1
 MAINTAINER Rémi GATTAZ <remi.gattaz@gmail.com>
 
 ADD run.sh /run.sh
