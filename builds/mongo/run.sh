@@ -4,7 +4,7 @@ set -m
 
 
 # Start mongodb
-mongod --smallfiles --auth &
+mongod --smallfiles --auth --bind_ip_all &
 
 # Wait for mongodb to startup
 RET=1
